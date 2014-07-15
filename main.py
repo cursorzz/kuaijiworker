@@ -1,7 +1,11 @@
 import time
-import sys
+from parser import Updater
+import datetime
 
 while True:
-		time.sleep(3)
-		sys.stdout.write("hello python world\n")
-		sys.stdout.flush()
+    u = Updater()
+    today = datetime.date.today()
+    u.get_today_quests(today)
+    print 'get quest finish'
+    time.sleep(60 * 30)
+        
