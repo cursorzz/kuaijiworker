@@ -1,0 +1,6 @@
+Django==1.5.2
+redis
+django-redis
+BeautifulSoup4
+mechanize
+MySQL-python
