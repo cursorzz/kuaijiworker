@@ -6,7 +6,7 @@ except ImportError:
 import datetime
 
 #mysql_db = MySQLDatabase('quests', user='root', passwd="root")
-mysql_db = MySQLDatabase('quests', user='aBv5vhN9Lggo58zURGFsHE56', passwd="FOnYOKWYnT92fT7VMcVWUfY6MGMfm1Su", host="sqld.duapp.com", port='4050', name="XKhiXoNMpPmlvClmUico")
+mysql_db = MySQLDatabase('XKhiXoNMpPmlvClmUico', user='aBv5vhN9Lggo58zURGFsHE56', passwd="FOnYOKWYnT92fT7VMcVWUfY6MGMfm1Su", host="sqld.duapp.com", port=4050)
 
 
 class PickledObjectField(TextField):
