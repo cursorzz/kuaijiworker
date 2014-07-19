@@ -6,6 +6,7 @@ u = Updater()
 
 while True:
     today = datetime.date.today()
+    print "start todays job ", today
     mysql_db.connect()
     u.get_today_quests(today)
     mysql_db.close()

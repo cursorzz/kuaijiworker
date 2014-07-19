@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+#-*- coding:utf-8 -*-
 from peewee import *
 try:
 	import cPickle as pickle
@@ -5,8 +7,8 @@ except ImportError:
 	import pickle
 import datetime
 
-#mysql_db = MySQLDatabase('quests', user='root', passwd="root")
 mysql_db = MySQLDatabase('XKhiXoNMpPmlvClmUico', user='aBv5vhN9Lggo58zURGFsHE56', passwd="FOnYOKWYnT92fT7VMcVWUfY6MGMfm1Su", host="sqld.duapp.com", port=4050)
+#mysql_db = MySQLDatabase('quest1', user='root', passwd="root")
 
 
 class PickledObjectField(TextField):
@@ -18,6 +20,15 @@ class PickledObjectField(TextField):
         return pickle.loads(str(value))
 
 class Quest(Model):
+    QUEST_TYPES = (
+            (0, "未分类题目"),
+            (1, u"会计"),
+            (2, u"审计"),
+            (3, u"税法"),
+            (4, u"经济法"),
+            (5, u"财务成本管理"),
+            (6, u"公司战略与风险管理")
+            )
     date = DateField()
     link = CharField(max_length=500)
     uid = CharField(max_length=200)
@@ -27,6 +38,7 @@ class Quest(Model):
     options = PickledObjectField()
     answer = PickledObjectField()
     reason = TextField()
+    q_type = IntegerField(default=0)
 
     class Meta:
         database = mysql_db
