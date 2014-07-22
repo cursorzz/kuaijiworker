@@ -4,7 +4,6 @@
 import mechanize
 import re
 from bs4 import BeautifulSoup as bs
-import datetime
 import hashlib
 from model import Quest
 from traceback import print_exc
@@ -103,10 +102,17 @@ class Updater(object):
         if not isinstance(quest, JsonDict):
             quest.save()
 
-    def get_quest_content(self, link, date, force=False):
+    def get_quest_content(self, link, date):
+        info = self._get_quest_content(link, date)
+        try:
+            Quest.get(uid=info['uid'])
+        except Quest.DoesNotExist:
+            Quest.create(**info)
+
+    def _get_quest_content(self, link, date):
         md5 = hashlib.md5(link).hexdigest()
-        #date_match = re.match(day_pattern, link).groups()[0]
-        #date = datetime.datetime.strptime(date_match, date_fmt)
+        single = u"单选题"
+        multip = u"多选题"
         date = date
         try:
             info = {'options': {}}
@@ -116,14 +122,20 @@ class Updater(object):
             page = bs(urlopen(link))
             info['title'] = page.select(".news_content")[0].findChild().text
             show_button = page.select('#fontzoom p input[type=button]')[0]
-            quest = show_button.parent.find_previous_siblings('p')
-            quest.reverse()
-            for q in quest:
-                if q.select('script'):
-                    quest.remove(q)
-            info['type'] = quest[0].text
-            info['question'] = quest[1].text
-            for q in quest[2:]:
+            all_node = show_button.parent.find_previous_siblings('p')
+            all_node.reverse()
+            # try to find the position of question type
+            type_index = 0
+            question_index = 0
+            for index, node in enumerate(all_node):
+                if re.match(ur'[\u3000]*[%s|%s][\u3000]*'%(single, multip), node.text):
+                    type_index = index
+                elif re.match(ur'[\u3000|\xa0|\s]*A[\u3001]([^\xa0]+)$', node.text):
+                    question_index = index
+                    break
+            info['type'] = all_node[type_index].text.replace(u'\u3000', '')
+            info['question'] = '\n'.join([node.text for node in all_node[type_index + 1:question_index]])
+            for q in all_node[question_index:]:
                 match = re.match(ur'[\u3000|\xa0|\s]*([A-Z]+)[\u3001]([^\xa0]+)$', q.text)
                 if match:
                     info['options'][match.groups()[0]] = match.groups()[1]
@@ -135,13 +147,12 @@ class Updater(object):
                     info['reason'] = p.text
             
             self.get_quest_type(info) # update correct quest type
-            
-            #info['date'] = info['date'].date()
-            try:
-                Quest.get(uid=info['uid'])
-            except Quest.DoesNotExist:
-                Quest.create(**info)
+            return info
         except Exception, e:
             print_exc()
             print e, link
+            return info
+
+            
+            #info['date'] = info['date'].date()
 
