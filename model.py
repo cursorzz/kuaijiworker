@@ -7,8 +7,8 @@ except ImportError:
 	import pickle
 import datetime
 
-#mysql_db = MySQLDatabase('XKhiXoNMpPmlvClmUico', user='aBv5vhN9Lggo58zURGFsHE56', passwd="FOnYOKWYnT92fT7VMcVWUfY6MGMfm1Su", host="sqld.duapp.com", port=4050)
-mysql_db = MySQLDatabase('quest1', user='root', passwd="root")
+mysql_db = MySQLDatabase('XKhiXoNMpPmlvClmUico', user='aBv5vhN9Lggo58zURGFsHE56', passwd="FOnYOKWYnT92fT7VMcVWUfY6MGMfm1Su", host="sqld.duapp.com", port=4050)
+#mysql_db = MySQLDatabase('quest1', user='root', passwd="root")
 
 
 class PickledObjectField(TextField):
