@@ -14,7 +14,7 @@ mysql_db = MySQLDatabase('quest1', user='root', passwd="root")
 class PickledObjectField(TextField):
 
     def replace_odd_string(self, picked):
-        odds = u'×'
+        odds = '\xd7'
         return picked.replace(odds, 'x')
 
     def db_value(self, value):
