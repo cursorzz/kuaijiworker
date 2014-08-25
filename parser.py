@@ -136,7 +136,7 @@ class Updater(object):
             info['type'] = all_node[type_index].text.replace(u'\u3000', '')
             info['question'] = '\n'.join([node.text for node in all_node[type_index + 1:question_index]])
             for q in all_node[question_index:]:
-                match = re.match(ur'[\u3000|\xa0|\s]*([A-Z]+)[\u3001]([^\xa0]+)$', q.text)
+                match = re.match(ur'[\u3000|\xa0|\s]*([A-Z]+)[\u3001]([^\xa0]+)[\xa0]*$', q.text)
                 if match:
                     info['options'][match.groups()[0]] = match.groups()[1]
                     continue
