@@ -30,10 +30,6 @@ while True:
 
 
 
-    
-    
-
-
 if save_point_file.exist():
     start_day = datetime.str
 

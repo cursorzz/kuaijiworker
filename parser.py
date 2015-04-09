@@ -9,7 +9,7 @@ from model import Quest
 from traceback import print_exc
 from urllib import urlopen
 import json
-from datetime import datetime
+from datetime import datetime, date
 import logging
 FORMAT = '%(asctime)-15s %(message)s'
 logging.basicConfig(format=FORMAT, filename="./logs/missing.log")
@@ -139,6 +139,10 @@ class Parser(object):
         print self.to_json(page)
 
     def to_json(self, page):
+        if isinstance(self.date, date):
+            day = self.date
+        else:
+            day = self.date.date()
         return {
                 "uid": self.get_question_id(page),
                 "title": self.courses()[self.course_id],
@@ -146,7 +150,7 @@ class Parser(object):
                 "answer" : self.get_answer_ary(page),
                 "reason":self.get_jiexi(page),
                 "link": self.base_url,
-                "date":self.date.date(),
+                "date": day,
                 "type":self.get_question_type_display(page),
                 "options" : self.get_question_map(page),
                 }
