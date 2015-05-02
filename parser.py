@@ -11,6 +11,7 @@ from urllib import urlopen
 import json
 from datetime import datetime, date
 import logging
+import pdb
 FORMAT = '%(asctime)-15s %(message)s'
 logging.basicConfig(format=FORMAT, filename="./logs/missing.log")
 
@@ -90,7 +91,10 @@ class Parser(object):
         return page.select("#JX%s"%self.get_question_id(page))[0].text.strip().split('\r',1)[-1].strip()
 
     def get_question_content(self, page):
-        return page.select("#fcontent_%d"%(self.get_question_id(page)))[0].text
+        try:
+            return page.select("#fcontent_%d"%(self.get_question_id(page)))[0].text
+        except:
+            return page.select(".dt_wt")[0].text
 
     def get_question_map(self, page):
         all_options = {}
